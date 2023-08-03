@@ -6,12 +6,6 @@
 class Address
 {
 public:
-	Address() {
-		city_ = "";
-		street_ = "";
-		home_ = 0;
-		apartment_ = 0;
-	};
 	Address(std::string &city, std::string &street, int &home, int &apartment) {
 		city_ = city;
 		street_ = street;
@@ -46,7 +40,7 @@ int main()
 	
 	if (size_arr > 0)
 	{
-		Address* address = new Address[size_arr];
+		Address** address = new Address*[size_arr];
 
 		for (size_t i = 0; i < size_arr; i++)
 		{
@@ -60,27 +54,24 @@ int main()
 			flie_read >> home;
 			flie_read >> apartment;
 
-			address[i] = Address(city, street, home, apartment);
+			address[i] = new Address(city, street, home, apartment);
 		}
 
 		std::ofstream flie_write("out.txt");
-		if (!flie_write.is_open())
-		{
-			std::cout << "File 'out.txt' not open!\n";
-			delete[] address;
-			return 0;
-		}
 
 		flie_write << size_arr << std::endl;
 
 		for (size_t i = 0; i < size_arr; i++)
 		{
-			flie_write << address[i].get_output_address() << std::endl;
+			flie_write << address[i]->get_output_address() << std::endl;
 		}
 
 		flie_write.close();
 
-
+		for (size_t i = 0; i < size_arr; i++)
+		{
+			delete address[i];
+		}
 		delete[] address;
 		
 	}
